@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<robot name="docking_robot">
+
+  <!-- Define a static base link -->
+  <link name="base_link">
+    <visual>
+      <geometry>
+        <box size="0.5 0.5 0.1"/>
+      </geometry>
+    </visual>
+  </link>
+
+  <!-- Define a camera link -->
+  <link name="camera_link">
+    <visual>
+      <geometry>
+        <box size="0.2 0.2 0.1"/>
+      </geometry>
+    </visual>
+  </link>
+
+  <!-- Define the transform between base_link and camera_link -->
+  <joint name="base_to_camera" type="fixed">
+    <parent link="base_link"/>
+    <child link="camera_link"/>
+    <origin xyz="0.0 0.0 0.1" rpy="0 0 0"/>
+  </joint>
+
+</robot>

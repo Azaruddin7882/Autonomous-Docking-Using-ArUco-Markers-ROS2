@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<gazebo>
+  <world name="default">
+    <!-- Define the environment -->
+    <include>
+      <uri>model://ground_plane</uri>
+    </include>
+    
+    <!-- Include your URDF model -->
+    <include>
+      <uri>file:///../../ros2_docking_ws1/src/docking_robot/urdf/robot.urdf</uri>  <!-- Adjust the path as needed -->
+    </include>
+  </world>
+</gazebo>

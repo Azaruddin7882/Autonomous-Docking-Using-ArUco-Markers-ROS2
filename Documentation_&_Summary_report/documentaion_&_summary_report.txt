@@ -1,0 +1,249 @@
+### Summary Report: Autonomous Docking Using ArUco Markers in ROS2 ###
+
+---
+
+1. Objective
+
+   The project is designed to develop a ROS2-based solution for autonomously docking a robot using ArUco markers. The aim is to set up a ROS2 -  
+   
+   workspace, simulate the robot, detect ArUco markers, implement docking logic, and validate the system's performance.
+
+2. Components and Directory Structure
+
+   azar@azar-HP-ProBook-440-G8-Notebook-PC:~/ros2_docking_ws1$ tree
+.
+├── package.xml
+├── setup.py
+└── src
+    └── docking_robot
+        ├── docking_node
+        │   ├── aruco_marker_detection.py
+        │   └── docking_logic.py
+        ├── docking_robot
+        │   └── __init__.py
+        ├── launch
+        │   ├── docking_launch.py
+        │   └── gazebo_launch.py
+        ├── resource
+        │   ├── docking_robot
+        │   └── markers
+        │       └── aruco_marker.png
+        ├── rviz
+        │   └── rviz_config.rviz
+        ├── setup.cfg
+        ├── test
+        │   ├── test_copyright.py
+        │   ├── test_flake8.py
+        │   └── test_pep257.py
+        ├── urdf
+        │   └── robot.urdf
+        └── worlds
+            └── docking_world.world
+
+
+
+   1. The `package.xml` file contains metadata about the ROS2 package, including dependencies and a description of the package.
+   
+   2. The `setup.py` script is used for building and installing the package.
+   
+   3. The `src/docking_robot` directory holds the main source code for the ROS2 package:
+   
+      - The `docking_node` subdirectory includes Python scripts for ROS2 nodes.
+      
+        - `aruco_marker_detection.py` is responsible for detecting ArUco markers from camera images and publishing their poses.
+        
+        - `docking_logic.py` handles the computation of control commands based on marker poses to enable the robot to dock.
+        
+      - The `docking_robot` subdirectory contains an **`__init__.py`** file, which is necessary for initializing the package.
+      
+      - The `launch` directory contains launch files for starting the nodes.
+      
+        - `docking_launch.py` is used to launch the ArUco marker detection and docking logic nodes.
+        
+        - `gazebo_launch.py` is used to start the Gazebo simulation.
+        
+      - The `resource` directory holds additional resources such as images.
+      
+        - `markers/aruco_marker.png` is the image of the ArUco marker used in the detection process.
+        
+      - The `rviz` directory contains configuration files for RViz visualization.
+      
+        - `rviz_config.rviz` is used for visualizing the robot and markers in RViz.
+        
+      - The `setup.cfg` file is a configuration file for setup tools.
+      
+      - The `urdf` directory contains the robot description file.
+      
+        - `robot.urdf` defines the physical properties of the robot for simulation.
+        
+      - The `worlds` directory holds simulation world files for Gazebo.
+      
+        - `docking_world.world` is a Gazebo world file that sets up the environment for testing the docking process.
+
+3. Implementation Steps
+
+   1. To set up the environment, created a ROS2 workspace and install all necessary tools and dependencies.
+   
+   2. For robot simulation, used the **`robot.urdf`** file to define the robot model for Gazebo or RViz. 
+   
+   3. Implemented the **`aruco_marker_detection.py`** node to detect ArUco markers from camera images. This node converts ROS image messages to
+   
+      OpenCV images, detects the markers, and publishes their poses using `cv_bridge` and `cv2.aruco`.
+   
+   4. Implemented the **`docking_logic.py`** node to compute control commands based on the marker poses. This node subscribes to the marker pose
+   
+      topic and generates commands to control the robot's movements for docking.
+   
+   5. The idea is to test the system in Gazebo by placing multiple ArUco markers at different locations to verify that the robot can detect and
+     
+      dock accurately.
+  
+
+4. Running the Project
+
+   1. Build the package by navigating to the workspace directory and executing:
+      
+      cd ros2_docking_ws1
+      
+      colcon build
+      
+      source install/setup.bash
+      
+      
+   2. Run the simulation and nodes by starting Gazebo and the necessary nodes:
+     
+      - Implemented two launch files for testing we can use any one of them.
+   
+      - Start Gazebo simulation with:
+       
+        ros2 launch docking_robot gazebo_launch.py
+       
+      - Launch the detection and docking logic nodes with:
+       
+        ros2 launch docking_robot docking_launch.py
+      
+      - Incase need debug or run the nodes directly:
+        
+        ros2 run docking_robot aruco_marker_detection
+        
+        ros2 run docking_robot docking_logic
+       
+
+5. Challenges faced while developing the Autonomous Docking Using ArUco Markers in ROS2:
+
+  5.1-> Able Build the ros2_docking_ws1 project, after building while launch nodes through gazebo iam facing set of errors , i want showcase them 
+    
+       i provided below as reference  as well as i attached along with summary report snapshots also attacted you can refer them
+       
+    
+       [INFO] [launch]: All log files can be found below /home/azar/.ros/log/2024-08-17-01-31-32-938047-azar-HP-ProBook-440-G8-Notebook-PC-243565
+    
+       [INFO] [launch]: Default logging verbosity is set to INFO
+    
+       [ERROR] [launch]: Caught exception in launch (see debug for traceback): executable 'gzserver' not found on the libexec directory '/opt/  
+       
+       ros/humble/lib/gazebo_ros' 
+       
+       
+  5.2-> Able Build the ros2_docking_ws1 project, after building while launch nodes through launch file iam facing set of errors , i want showcase
+  
+        them i provided below as reference  as well as i attached along with summary report snapshots also attacted you can refer them
+        
+        
+        [INFO] [launch]: All log files can be found below /home/azar/.ros/log/2024-08-17-01-37-16-695256-azar-HP-ProBook-440-G8-Notebook-PC-245701
+        
+        [INFO] [launch]: Default logging verbosity is set to INFO
+        
+        [ERROR] [launch]: Caught exception in launch (see debug for traceback): package 'docking_robot' found at '/home/azar/ros2_docking_ws1
+        
+        /install/docking_robot', but libexec directory '/home/azar/ros2_docking_ws1/install/docking_robot/lib/docking_robot' does not exist
+       
+  5.3-> setup.py file approach 1 
+  
+        I implemeted setup file by using below code iam able to build project and facing above errors , for reference iam providing code snnipet
+        
+        below and along with summary report snapshots attacted you can refer them
+        
+        
+'''from setuptools import find_packages, setup
+
+package_name = 'docking_robot'
+
+setup(
+    name=package_name,
+    version='0.0.0',
+    packages=find_packages(where='src'),
+    package_dir={'': 'src'},
+    data_files=[
+        ('share/ament_index/resource_index/packages',
+         ['package.xml']),  # Path to package.xml
+        ('share/' + package_name + '/launch',
+         ['src/' + package_name + '/launch/docking_launch.py',
+          'src/' + package_name + '/launch/gazebo_launch.py']),
+        ('share/' + package_name + '/urdf',
+         ['src/' + package_name + '/urdf/robot.urdf']),
+        ('share/' + package_name + '/worlds',
+         ['src/' + package_name + '/worlds/docking_world.world']),
+        ('share/' + package_name + '/rviz',
+         ['src/' + package_name + '/rviz/rviz_config.rviz']),
+        ('share/' + package_name + '/resource/markers',
+         ['src/' + package_name + '/resource/markers/aruco_marker.png']),
+    ],
+    install_requires=['setuptools'],
+    zip_safe=True,
+    maintainer='azar',
+    maintainer_email='shaik.azaruddin1@wipro.com',
+    description='ROS2 package for autonomous docking using ArUco markers',
+    license='TODO: License declaration',
+    tests_require=['pytest'],
+    entry_points={
+        'console_scripts': [
+            'aruco_marker_detection = docking_robot.docking_node.aruco_marker_detection:main',
+            'docking_logic = docking_robot.docking_node.docking_logic:main',
+        ],
+    },
+)'''        
+        
+5.4-> setup.py file approach 2
+
+     I implemeted setup file by using below code  iam unable to build project and facing different errors , for reference iam providing code
+     
+     snnipet below and along with summary report snapshots attacted you can refer them
+     
+     
+'''from setuptools import find_packages, setup
+
+package_name = 'docking_robot'
+
+setup(
+    name=package_name,
+    version='0.0.0',
+    packages=find_packages(exclude=['test']),
+    packages=find_packages(where='src'),  # Find packages in the src directory
+    package_dir={'': 'src'},  # Set src as the root for package discovery
+    package_data={
+        package_name: [
+            'launch/*.py',  # Include all Python files in the launch directory
+            'urdf/*.urdf',
+            'rviz/*.rviz',
+            'resource/markers/*.png',
+        ],
+    },
+    install_requires=['setuptools'],
+    zip_safe=True,
+    maintainer='azar',
+    maintainer_email='shaik.azaruddin1@wipro.com',
+    description='ROS2 package for autonomous docking using ArUco markers',
+    license='TODO: License declaration',
+    tests_require=['pytest'],
+    entry_points={
+        'console_scripts': [
+            'aruco_marker_detection = docking_robot.docking_node.aruco_marker_detection:main',
+            'docking_logic = docking_robot.docking_node.docking_logic:main',
+        ],
+    },
+)   
+          
+This summary provides a comprehensive overview of the project, including details about each component, implementation steps, and instructions for
+
+ running and validating the system.
